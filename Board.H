@@ -24,8 +24,8 @@ void Board::show()
 		rectangle(x-(width/2)*i,y-(height/2)*i,x+(width/2)*i,y+(height/2)*i);
 	for(i=-1;i<=1;i+=2)
 	{
-		line(x-(width/2)*3*i,y-(height/2)*3*i,x-width/2*i,y-height/2*i);	// \ \ 
-		line(x+(width/2)*3*i,y-(height/2)*3*i,x+width/2*i,y-height/2*i);	// / / 
+		line(x-(width/2)*3*i,y-(height/2)*3*i,x-width/2*i,y-height/2*i);	// \ \
+		line(x+(width/2)*3*i,y-(height/2)*3*i,x+width/2*i,y-height/2*i);	// / /
 		line(x+(width/2)*3*i,y,x+width/2*i,y);   // - -
 		line(x,y-(height/2)*3*i,x,y-height/2*i); // | |
 	}
@@ -36,11 +36,11 @@ void Board::show()
 		{
 			for(k=-1;k<=1;k++)
 			{
-				cells[i][j+2][k+2].show(x-(width/2*i)*j,y-(height/2*i)*k,width<height?width/6:height/6,NN,cellBorderColor);
+				if( !(j==0&&k==0) )
+					cells[i][j+2][k+2].show(x-(width/2*i)*j,y-(height/2*i)*k,width<height?width/6:height/6,NN,cellBorderColor);
 			}
 		}
 	}
-	//outtextxy(x+(width/2)*3+(width<height?width/6:height/6),y,"Iranian Tic-Tac-Toe Game");
 }
 
 void Board::hide()
@@ -51,11 +51,11 @@ void Board::hide()
 	rectangle(x-width,y-height,x+width,y+height);
 	rectangle(x-(width/2)*3,y-(height/2)*3,x+(width/2)*3,y+(height/2)*3);
 
-	// \ \ 
+	// \ \
 	line(x-(width/2)*3,y-(height/2)*3,x-width/2,y-height/2);
 	line(x+(width/2)*3,y+(height/2)*3,x+width/2,y+height/2);
 
-	// / / 
+	// / /
 	line(x+(width/2)*3,y-(height/2)*3,x+width/2,y-height/2);
 	line(x-(width/2)*3,y+(height/2)*3,x-width/2,y+height/2);
 
