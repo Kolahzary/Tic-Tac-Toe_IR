@@ -13,7 +13,6 @@ class XO
 		void H(int,int,int);	// highlight
 		void uH(int,int,int);	// undo highlight
 		void findH(int*,int*,int*);// find and returns highlighted cell's position
-		void checkEnd();
 	public:
 		Board board;
 		XO();
@@ -23,7 +22,6 @@ class XO
 		void select();
 		void check();
 };
-
 void XO::end(int who)
 {
 	char winner;
@@ -83,11 +81,6 @@ int XO::getDoozCount(int who)
 		break;
 	}
 	return count;
-}
-
-void XO::checkEnd()
-{
-	int i, j, k;
 }
 
 void XO::check()
@@ -467,6 +460,7 @@ void XO::move(int direction)
 void XO::show() // Show variables with graphics
 {
 	int i,j,k;
+	char strTmp[11],strTmp2[4];
 	   /*
 	clrscr();
 
@@ -501,6 +495,43 @@ void XO::show() // Show variables with graphics
 	cout << "remaining O: " << O << "\n";
 	cout << "Turn of: Player " << turn << "\n";
 	*/
+	settextjustify(CENTER_TEXT,CENTER_TEXT);
+	settextstyle(1,0,1);
+	{// Hide old text --> send "л" character to output --> ascii code: 219
+		setcolor(0);
+		outtextxy(getmaxx()/2,getmaxy()/2-10,"лллллллллл");
+		outtextxy(getmaxx()/2,getmaxy()/2+10,"лллллллллл");
+		outtextxy(getmaxx()/2,getmaxy()-15,"лллллллллллллллллллллллллллллллллллллллллллллллллл");
+		outtextxy(getmaxx()/2,getmaxy()-20,"лллллллллллллллллллллллллллллллллллллллллллллллллл");
+	}
+	if(turn==XX) setcolor(4); else setcolor(2);
+	outtextxy(getmaxx()/2,20,"Iranian Tic-Tac-Toe(Naughts and Crosses) Game");
+
+	switch (status)
+	{
+		case 1:
+			outtextxy(getmaxx()/2,getmaxy()-20,"Level 1: Insert");
+			break;
+		case 2:
+			outtextxy(getmaxx()/2,getmaxy()-20,"Level 2: Pick up a pawn to move");
+			break;
+		case 3:
+			outtextxy(getmaxx()/2,getmaxy()-20,"Level 2: Select a competitiors pawn to remove");
+			break;
+		case 4:
+			outtextxy(getmaxx()/2,getmaxy()-20,"Level 2: Put your pawn in an empty cell");
+	}
+
+	strcpy(strTmp,"Red: ");
+	itoa(X,strTmp2,10);
+	strcat(strTmp,strTmp2);
+	outtextxy(getmaxx()/2,getmaxy()/2-10,strTmp);
+
+	strcpy(strTmp,"Green: ");
+	itoa(O,strTmp2,10);
+	strcat(strTmp,strTmp2);
+	outtextxy(getmaxx()/2,getmaxy()/2+10,strTmp);
+
 	for(i=1;i<=3;i++)
 		for(j=1;j<=3;j++)
 			for(k=1;k<=3;k++)
@@ -510,21 +541,6 @@ void XO::show() // Show variables with graphics
 					board.cells[i][j][k].changeMode(game[i][j][k]);
 				}
 			}
-	/*
-
-
-XX			XX			XX
-	XX		XX		XX
-		XX	XX	XX
-XX	XX	XX		XX	XX	XX
-		XX	XX	XX
-	XX		XX		XX
-XX			XX			XX
-
-Level 1
-remaining X: 12
-remaining O: 12
-	*/
 }
 
 XO::XO()
