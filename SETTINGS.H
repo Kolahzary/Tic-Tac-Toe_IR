@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<stdlib.h>
 #include<graphics.h>
+#include<string.h>
 
 #define UP		1
 #define RIGHT	2
