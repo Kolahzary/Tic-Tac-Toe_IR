@@ -117,6 +117,8 @@ void XO::check()
 	case 1:
 		if (X <= 0 && O <= 0)
 		{
+			if(O<0 || X<0) status = 3; else status = 2;   // when pawn count is 0 and new dooz detected it will be less than 0
+
 			for (i = 1; i <= 3; i++) //floor
 				for (j = 1; j <= 3; j++) //column
 					for (k = 1; k <= 3; k++) //row
@@ -124,8 +126,8 @@ void XO::check()
 						if (game[i][j][k] == XX || game[i][j][k] == XH)      X++;
 						else if (game[i][j][k] == OO || game[i][j][k] == OH) O++;
 					}
-			if( (X==TOTALX) && (O==TOTALO) ) end(NN);
-			status = 2;
+			if( (X==TOTALX) && (O==TOTALO) ) end(NN); // if nothing removed, we don't have any space to move our pawn. so, game ended without winner
+
 		}
 		break;
 	case 2:
@@ -137,7 +139,6 @@ void XO::check()
 
 	oldXdooz = newXdooz;
 	oldOdooz = newOdooz;
-	//checkEnd();
 }
 
 void XO::select()
@@ -314,7 +315,7 @@ void XO::move(int direction)
 	findH(&i,&j,&k);
 	switch(direction)
 	{
-		case DOWN:
+		case UP:
 			if(j==2)
 			{
 				if(k==1)
@@ -322,6 +323,11 @@ void XO::move(int direction)
 					if(i+1<=3)
 					{
 						H(i+1,j,k);
+						uH(i,j,k);break;
+					}
+					else
+					{
+						H(i,j,3);
 						uH(i,j,k);break;
 					}
 				}
@@ -346,10 +352,20 @@ void XO::move(int direction)
 					H(i,j,k-1);
 					uH(i,j,k);break;
 				}
+				else if(i+1<=3)
+				{
+					H(i+1,j,k);
+					uH(i,j,k);break;
+				}
+				else
+				{
+					H(i,j,3);
+					uH(i,j,k);break;
+				}
 			}
 		break;
 		//////////////////////////////////////////////////////////////////////////////
-		case LEFT:
+		case RIGHT:
 			if(k==2)
 			{
 				if(j==1)
@@ -372,6 +388,11 @@ void XO::move(int direction)
 						H(i+1,j,k);
 						uH(i,j,k);break;
 					}
+					else
+					{
+						H(i,1,k);
+						uH(i,j,k);break;
+					}
 				}
 			}
 			else
@@ -381,10 +402,20 @@ void XO::move(int direction)
 					H(i,j+1,k);
 					uH(i,j,k);break;
 				}
+				else if(i+1<=3)
+				{
+					H(i+1,j,k);
+					uH(i,j,k);break;
+				}
+				else
+				{
+					H(i,1,k);
+					uH(i,j,k);break;
+				}
 			}
 		break;
 		//////////////////////////////////////////////////////////////////////////////
-		case UP:
+		case DOWN:
 			if(j==2)
 			{
 				if(k==1)
@@ -407,6 +438,11 @@ void XO::move(int direction)
 						H(i+1,j,k);
 						uH(i,j,k);break;
 					}
+					else
+					{
+						H(i,j,1);
+						uH(i,j,k);break;
+					}
 				}
 			}
 			else
@@ -416,10 +452,20 @@ void XO::move(int direction)
 					H(i,j,k+1);
 					uH(i,j,k);break;
 				}
+				else if(i+1<=3)
+				{
+					H(i+1,j,k);
+					uH(i,j,k);break;
+				}
+				else
+				{
+					H(i,j,1);
+					uH(i,j,k);break;
+				}
 			}
 		break;
 		//////////////////////////////////////////////////////////////////////////////
-		case RIGHT:
+		case LEFT:
 			if(k==2)
 			{
 				if(j==1)
@@ -427,6 +473,11 @@ void XO::move(int direction)
 					if(i+1<=3)
 					{
 						H(i+1,j,k);
+						uH(i,j,k);break;
+					}
+					else
+					{
+						H(i,3,k);
 						uH(i,j,k);break;
 					}
 				}
@@ -451,6 +502,16 @@ void XO::move(int direction)
 					H(i,j-1,k);
 					uH(i,j,k);break;
 				}
+				else if(i+1<=3)
+				{
+					H(i+1,j,k);
+					uH(i,j,k);break;
+				}
+				else
+				{
+					H(i,3,k);
+					uH(i,j,k);break;
+				}
 			}
 	}
 	show();
@@ -460,87 +521,15 @@ void XO::move(int direction)
 void XO::show() // Show variables with graphics
 {
 	int i,j,k;
-	char strTmp[11],strTmp2[4];
-	   /*
-	clrscr();
-
-	cout<<game[3][1][1]<<"\t\t\t"<<game[3][2][1]<<"\t\t\t"<<game[3][3][1]<<"\n\n\n";
-	cout<<"\t"<<game[2][1][1]<<"\t\t"<<game[2][2][1]<<"\t\t"<<game[2][3][1]<<"\n\n\n";
-	cout<<"\t\t"<<game[1][1][1]<<"\t"<<game[1][2][1]<<"\t"<<game[1][3][1]<<"\n\n\n";
-
-	cout<<game[3][1][2]<<"\t"<<game[2][1][2]<<"\t"<<game[1][1][2]<<"\t\t"<<game[1][3][2]<<"\t"<<game[2][3][2]<<"\t"<<game[3][3][2]<<"\n\n\n";
-
-	cout<<"\t\t"<<game[1][1][3]<<"\t"<<game[1][2][3]<<"\t"<<game[1][3][3]<<"\n\n\n";
-	cout<<"\t"<<game[2][1][3]<<"\t\t"<<game[2][2][3]<<"\t\t"<<game[2][3][3]<<"\n\n\n";
-	cout<<game[3][1][3]<<"\t\t\t"<<game[3][2][3]<<"\t\t\t"<<game[3][3][3]<<"\n\n\n";
-
-
-
-	cout<<"\n\n\n\n";
-	switch (status)
-	{
-		case 1:
-			cout << "Level 1: insert your pawns in game" << "\n\n";
-			break;
-		case 2:
-			cout << "Level 2: move your pawns and make a dooz" << "\n\n";
-			break;
-		case 3:
-			cout << "DooZZ!!: remove a competitior's pawn" << "\n\n";
-			break;
-		case 4:
-			cout << "Moving...: Put your pawn in an empty space" << "\n\n";
-	}
-	cout << "remaining X: " << X << "\n";
-	cout << "remaining O: " << O << "\n";
-	cout << "Turn of: Player " << turn << "\n";
-	*/
-	settextjustify(CENTER_TEXT,CENTER_TEXT);
-	settextstyle(1,0,1);
-	{// Hide old text --> send "л" character to output --> ascii code: 219
-		setcolor(0);
-		outtextxy(getmaxx()/2,getmaxy()/2-10,"лллллллллл");
-		outtextxy(getmaxx()/2,getmaxy()/2+10,"лллллллллл");
-		outtextxy(getmaxx()/2,getmaxy()-15,"лллллллллллллллллллллллллллллллллллллллллллллллллл");
-		outtextxy(getmaxx()/2,getmaxy()-20,"лллллллллллллллллллллллллллллллллллллллллллллллллл");
-	}
-	if(turn==XX) setcolor(4); else setcolor(2);
-	outtextxy(getmaxx()/2,20,"Iranian Tic-Tac-Toe(Naughts and Crosses) Game");
-
-	switch (status)
-	{
-		case 1:
-			outtextxy(getmaxx()/2,getmaxy()-20,"Level 1: Insert");
-			break;
-		case 2:
-			outtextxy(getmaxx()/2,getmaxy()-20,"Level 2: Pick up a pawn to move");
-			break;
-		case 3:
-			outtextxy(getmaxx()/2,getmaxy()-20,"Level 2: Select a competitiors pawn to remove");
-			break;
-		case 4:
-			outtextxy(getmaxx()/2,getmaxy()-20,"Level 2: Put your pawn in an empty cell");
-	}
-
-	strcpy(strTmp,"Red: ");
-	itoa(X,strTmp2,10);
-	strcat(strTmp,strTmp2);
-	outtextxy(getmaxx()/2,getmaxy()/2-10,strTmp);
-
-	strcpy(strTmp,"Green: ");
-	itoa(O,strTmp2,10);
-	strcat(strTmp,strTmp2);
-	outtextxy(getmaxx()/2,getmaxy()/2+10,strTmp);
-
+	
+	board.updateText(X,O,turn,status);
+	
+	/* Update Cells */
 	for(i=1;i<=3;i++)
 		for(j=1;j<=3;j++)
 			for(k=1;k<=3;k++)
-			{
 				if(board.cells[i][j][k].mode!=game[i][j][k])
-				{
 					board.cells[i][j][k].changeMode(game[i][j][k]);
-				}
-			}
 }
 
 XO::XO()
@@ -557,7 +546,7 @@ XO::XO()
 				else
 					game[i][j][k]=NN;
 			}
-	game[3][3][3]=HH;
+	game[3][1][1]=HH;
 	turn=FIRSTGAMER;
 	status=1;
 
